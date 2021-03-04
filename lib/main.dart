@@ -234,7 +234,7 @@ class _MyHomePageState extends State<MyHomePage> {
     for (BluetoothDevice device in widget.devicesList) {
       containers.add(
         Container(
-          height: 80,
+          height: 70,
           child: Row(
             children: <Widget>[
               Expanded(
@@ -242,6 +242,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   children: <Widget>[
                     Text(device.name == '' ? '(Woo ! unknown device)' : device.name),
                     Text(device.id.toString()),
+                    Text(device.type.toString()),
                   ],
                 ),
               ),
@@ -251,8 +252,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   'Connect',
                   style: TextStyle(color: Colors.white),
                 ),
-                onPressed: () {
-                  setState(() async{
+                onPressed: () async {
                     widget.flutterBlue.stopScan();
                     try{
                       await device.connect();
@@ -263,8 +263,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     }finally{
                       _services = await device.discoverServices();
                     }
-
-                    _connectedDevice = device;
+                    setState(() {
+                      _connectedDevice = device;
                   });
                 },
               ),
